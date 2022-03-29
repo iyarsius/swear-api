@@ -12,19 +12,19 @@
     "typescript": "^4.6.3",
     "user-agents": "^1.0.967"
   },
-  "name": "hypescraper",
-  "version": "1.0.1",
-  "description": "Global scraper for resell",
+  "name": "swear-api",
+  "version": "1.0.4",
+  "description": "Global wrapper for streetwear/resell websites",
   "main": "src/index.ts",
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iyarsius/HypeScraper.git"
+    "url": "git+https://github.com/iyarsius/swear-api.git"
   },
   "author": "iyarsius",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/iyarsius/HypeScraper/issues"
+    "url": "https://github.com/iyarsius/swear-api/issues"
   },
-  "homepage": "https://github.com/iyarsius/HypeScraper#readme"
+  "homepage": "https://github.com/iyarsius/swear-api#readme"
 }
