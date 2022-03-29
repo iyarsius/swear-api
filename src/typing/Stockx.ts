@@ -35,6 +35,7 @@ export interface IPartialStockxProduct {
     description: string;
     url: string;
     id: string;
+    sku: string;
     seller: string;
     colorway: string;
     markets: IStockxProductMarket[];
@@ -47,7 +48,6 @@ export interface IStockxProduct extends IPartialStockxProduct {
     salesLast72Hours?: number;
     totalSales?: number;
     retail?: number;
-    sku?: string;
     releaseDate?: string;
     imageURL(heigth?: number, width?:number): string;
     fetch(): Promise<IStockxProduct>;

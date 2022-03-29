@@ -30,6 +30,7 @@ export class StockxProduct {
         this.id = data.id;
         this.seller = data.seller;
         this.colorway = data.colorway;
+        this.sku = data.sku;
     }
 
     // Generate image url from id
