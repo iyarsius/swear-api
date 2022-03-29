@@ -4,12 +4,12 @@ import sizes from "../../../data/sizes";
 
 export class GoatProduct {
     private scraper: BaseScraper;
+    private _imageURL: string;
     public name: string;
     public url: string;
     public id: string;
     public sku: string;
     public colorway: string;
-    public imageURL: string;
     public ticker: string = '';
     public markets: IGoatProductMarket[];
 
@@ -21,7 +21,11 @@ export class GoatProduct {
         this.colorway = data.colorway;
         this.markets = data.markets;
         this.scraper = scraper;
-        this.imageURL = data.imageURL
+        this._imageURL = data.imageURL
+    }
+
+    imageURL() {
+        return this._imageURL;
     }
 
     async fetch() {
