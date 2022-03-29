@@ -4,6 +4,7 @@ export interface IPartialGoatProduct {
     name: string;
     condition: string;
     url: string;
+    sku: string;
     id: string;
     category: string;
     colorway: string;

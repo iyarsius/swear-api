@@ -3,8 +3,8 @@ import { ISizeConvesion } from "../typing/Sizings";
 // Store all sizes conversions
 export = [
     {
-        name: 'baby',
-        tickers: ["C", "TD", 'PS'],
+        name: "baby",
+        tickers: [ "TD", "C" ],
         sizes: [
             { sizeUS: "1", sizeEU: "16", sizeUK: "0.5" },
             { sizeUS: "1.5", sizeEU: "16.5", sizeUK: "1" },
@@ -25,6 +25,12 @@ export = [
             { sizeUS: "9", sizeEU: "26", sizeUK: "8.5" },
             { sizeUS: "9.5", sizeEU: "26.5", sizeUK: "9" },
             { sizeUS: "10", sizeEU: "27", sizeUK: "9.5" },
+        ]
+    },
+    {
+        name: 'kids',
+        tickers: ["C", "Y", 'PS'],
+        sizes: [
             { sizeUS: "10.5", sizeEU: "27.5", sizeUK: "10" },
             { sizeUS: "11", sizeEU: "28", sizeUK: "10.5" },
             { sizeUS: "11.5", sizeEU: "28.5", sizeUK: "11" },
@@ -32,17 +38,17 @@ export = [
             { sizeUS: "12.5", sizeEU: "30", sizeUK: "12" },
             { sizeUS: "13", sizeEU: "31", sizeUK: "12.5" },
             { sizeUS: "13.5", sizeEU: "31.5", sizeUK: "13" },
+            { sizeUS: "1", sizeEU: "32", sizeUK: "13.5" },
+            { sizeUS: "1.5", sizeEU: "33", sizeUK: "1" },
+            { sizeUS: "2", sizeEU: "33.5", sizeUK: "1.5" },
+            { sizeUS: "2.5", sizeEU: "34", sizeUK: "2" },
+            { sizeUS: "3", sizeEU: "35", sizeUK: "2.5" },
         ],
     },
     {
         name: 'infant',
         tickers: ["Y", "GS"],
         sizes: [
-            { sizeUS: "1", sizeEU: "32", sizeUK: "13.5" },
-            { sizeUS: "1.5", sizeEU: "33", sizeUK: "1" },
-            { sizeUS: "2", sizeEU: "33.5", sizeUK: "1.5" },
-            { sizeUS: "2.5", sizeEU: "34", sizeUK: "2" },
-            { sizeUS: "3", sizeEU: "35", sizeUK: "2.5" },
             { sizeUS: "3.5", sizeEU: "35.5", sizeUK: "3" },
             { sizeUS: "4", sizeEU: "36", sizeUK: "3.5" },
             { sizeUS: "4.5", sizeEU: "36.5", sizeUK: "4" },

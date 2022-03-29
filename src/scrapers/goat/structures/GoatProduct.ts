@@ -7,6 +7,7 @@ export class GoatProduct {
     public name: string;
     public url: string;
     public id: string;
+    public sku: string;
     public colorway: string;
     public imageURL: string;
     public ticker: string = '';
@@ -15,6 +16,7 @@ export class GoatProduct {
     constructor(data: IPartialGoatProduct, scraper: BaseScraper) {
         this.name = data.name;
         this.url = data.url;
+        this.sku = data.sku;
         this.id = data.id;
         this.colorway = data.colorway;
         this.markets = data.markets;

@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "ts-node src/index.ts",
-    "build": "tsc",
+    "build": "tsc --declaration",
     "test": "ts-node src/test.ts"
   },
   "dependencies": {
@@ -11,5 +11,20 @@
     "tslib": "^2.3.1",
     "typescript": "^4.6.3",
     "user-agents": "^1.0.967"
-  }
+  },
+  "name": "hypescraper",
+  "version": "1.0.1",
+  "description": "Global scraper for resell",
+  "main": "src/index.ts",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iyarsius/HypeScraper.git"
+  },
+  "author": "iyarsius",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iyarsius/HypeScraper/issues"
+  },
+  "homepage": "https://github.com/iyarsius/HypeScraper#readme"
 }

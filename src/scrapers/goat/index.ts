@@ -23,6 +23,7 @@ export class Goat {
                 name: product.value,
                 url: `https://www.goat.com/${product.data.product_type}/${product.data.slug}`,
                 id: product.data.id,
+                sku: product.data.sku,
                 colorway: product.data.color,
                 condition: product.data.condition,
                 category: product.product_type,
