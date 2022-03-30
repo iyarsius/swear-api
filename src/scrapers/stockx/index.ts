@@ -9,7 +9,7 @@ export class Stockx {
         this.scraper = new BaseScraper(config);
     };
 
-    // Get stockx product from SKU or keywords
+    // Get stockx product list from SKU or keywords
     async searchProducts(input: string, productsToRetrieve: number = 1): Promise<StockxProduct[]> {
         // remove all non-alphanumeric characters except spaces
         input = input.replace(/[^a-zA-Z0-9 ]/g, '');
@@ -30,5 +30,10 @@ export class Stockx {
                 markets: []
             }, this.scraper);
         });
+    }
+
+    // Get stockx product from SKU
+    async getProduct(input: string): Promise<StockxProduct> {
+        return await this.searchProducts(input, 1).then(products => products[0]);
     }
 }
