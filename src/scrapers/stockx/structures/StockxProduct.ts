@@ -55,8 +55,8 @@ export class StockxProduct {
             operationName: "GetProduct",
             variables: {
                 id: this.id,
-                currencyCode: "USD",
-                countryCode: "US",
+                currencyCode: this.scraper.currencyCode,
+                countryCode: this.scraper.countryCode,
             },
             query: payloads.GetProduct
         }
