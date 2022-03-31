@@ -13,7 +13,7 @@ export class BaseScraper {
     public retryDelay: number = 1000;
     public userAgent: string | undefined;
     public lastUrl: string = '';
-    public countryCode: string = "US";
+    public countryCode: "US" | "FR" | "ES" | "CA" | "DE" | "GB" | "IT" | "JP" = "US";
     public currencyCode: string = "USD";
 
     constructor(config: IScraperConfig) {
@@ -82,7 +82,7 @@ export class BaseScraper {
         const headers: string[][] = [
             ['user-agent', this.userAgent || new UserAgent().toString()],
             ['accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'],
-            ['accept-language', 'en-US,en;q=0.9'],
+            ['accept-language', 'en-US,en;q=0.9;'],
             ['cache-control', 'max-age=0'],
             ['connection', 'keep-alive'],
             ['upgrade-insecure-requests', '1'],
@@ -187,7 +187,7 @@ export class BaseScraper {
                 agent: proxy ? new HttpsProxyAgent({
                     host: proxy.host,
                     port: proxy.port,
-                    auth: proxy.username ? proxy.username + ':' + proxy.password : undefined
+                    auth: proxy.username ? proxy.username + ':' + proxy.password : undefined,
                 }) : undefined,
                 follow: 0,
             };

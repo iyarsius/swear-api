@@ -14,6 +14,7 @@ export interface IPartialGoatProduct {
 export interface IGoatProduct extends IPartialGoatProduct {
     ticker?: string;
     fetch(): Promise<IGoatProduct>;
+    relatedProducts(): Promise<IGoatProduct[]>;
 };
 
 export interface IGoatConditionMarket {

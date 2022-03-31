@@ -6,11 +6,15 @@ export class GoatProduct {
     private scraper: BaseScraper;
     public imageURL: () => string;
     public name: string;
+    public description: string;
+    public seller: string;
+    public releaseDate: string;
     public url: string;
     public category: string;
     public id: string;
     public sku: string;
     public colorway: string;
+    public lowestAsk: number;
     public ticker: string;
     public markets: IGoatProductMarket[];
 
@@ -31,6 +35,7 @@ export class GoatProduct {
         const nameWords = this.name.toUpperCase().split(' ');
         const ticker = nameWords.find(word => sizes.find(size => size.tickers.includes(word)));
 
+        this.ticker = "";
         if (ticker) {
             this.ticker = ticker;
         };
@@ -38,26 +43,64 @@ export class GoatProduct {
         // randomize referer
         const random = Math.random() >= 0.5;
         let additionnalHeaders = [
-            [ "referer", random ? "https://www.google.com/" : "https://www.goat.com/" ],
-            [ "Accept", "application/json" ],
-            [ "content-type", "application/json" ],
+            ["Accept", "application/json"],
         ];
 
-        // get csrf token from cookie if cookie exists and create header from it
-        const csrfToken = this.scraper.getCookieValue('csrf');
-
-        if (csrfToken) {
-            additionnalHeaders.push(["x-csrf-token", csrfToken])
+        // generate accept-language header from country code
+        switch (this.scraper.countryCode) {
+            case "US":
+                additionnalHeaders.push(["accept-language", "en-US,en;q=0.9"]);
+                break;
+            case "GB":
+                additionnalHeaders.push(["accept-language", "en-GB,en;q=0.9"]);
+                break;
+            case "CA":
+                additionnalHeaders.push(["accept-language", "en-CA,en;q=0.9"]);
+                break;
+            case "FR":
+                additionnalHeaders.push(["accept-language", "fr-FR,fr;q=0.9"]);
+                break;
+            case "DE":
+                additionnalHeaders.push(["accept-language", "de-DE,de;q=0.9"]);
+                break;
+            default: additionnalHeaders.push(["accept-language", "en-US,en;q=0.9"]);
         }
 
-        this.scraper.addCookieValue("currency", this.scraper.currencyCode);
-        this.scraper.addCookieValue("country", this.scraper.countryCode);
+        const headers = [
+            `GOAT/2.51.0 (iPad: iOS 13.3; Scale/2.00) Locale/${this.scraper.countryCode.toLowerCase()}`,
+            `GOAT/2.51.0 (iPad: iOS 15.0.2; Scale/2.00) Locale/${this.scraper.countryCode.toLowerCase()}`,
+            `GOAT/2.51.0 (iPhone: iOS 13.3; Scale/2.00) Locale/${this.scraper.countryCode.toLowerCase()}`,
+            `GOAT/2.51.0 (iPhone: iOS 15.0.2; Scale/2.00) Locale/${this.scraper.countryCode.toLowerCase()}`
+        ]
 
+        // add random header
+        additionnalHeaders.push(["user-agent", headers[Math.floor(Math.random() * headers.length)]]);
+
+        this.scraper.addCookieValue("currency", this.scraper.currencyCode);
+
+        const algoliaPayload = {
+            "query": "",
+            "facetFilters": [`product_template_id:${this.id}`],
+        };
+
+        const requests = await Promise.all([
+            this.scraper.get(
+                `https://www.goat.com/api/v1/product_variants/buy_bar_data?productTemplateId=${this.id}&countryCode=${this.scraper.countryCode}`,
+                additionnalHeaders
+            ).then(JSON.parse),
+            this.scraper.post(
+                `https://2fwotdvm2o-dsn.algolia.net/1/indexes/product_variants_v2/query?x-algolia-agent=Algolia%20for%20JavaScript%20(4.10.5)%3B%20Browser%20(lite)&x-algolia-api-key=ac96de6fef0e02bb95d433d8d5c7038a&x-algolia-application-id=2FWOTDVM2O`,
+                JSON.stringify(algoliaPayload),
+                [["X-Alg-PT", "1"], ["X-Content-Type-Options", "nosniff"]],
+            ).then(JSON.parse),
+        ])
         // Get variants
-        const response = await this.scraper.get(
-            `https://www.goat.com/web-api/v1/product_variants/buy_bar_data?productTemplateId=${this.id}&countryCode=${this.scraper.countryCode}`,
-            additionnalHeaders
-        ).then(JSON.parse);
+        const response = requests[0];
+        const algoliaResponse = requests[1].hits[0];
+
+        this.releaseDate = algoliaResponse.release_date.split('T')[0];
+        this.description = algoliaResponse.story_html;
+        this.seller = algoliaResponse._highlightResult.brand_name.value;
 
         // Parse variants into markets
         response.map(variant => {
@@ -88,9 +131,14 @@ export class GoatProduct {
             };
         });
 
+        const asks = response.map(variant => variant.lowestPriceCents.amount);
+
+        // find lowest price in markets;
+        this.lowestAsk = asks.sort((a, b) => a - b)[0] / 100;
+
         return this;
     };
-    
+
     async relatedProducts(productsToRetrieve: number = 15) {
         const response = await this.scraper.get(`https://www.goat.com/api/v1/product_templates/recommended?count=${productsToRetrieve}&productTemplateId=${this.id}`).then(JSON.parse);
 

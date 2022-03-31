@@ -25,7 +25,7 @@ export class Goat {
                 id: product.data.id,
                 sku: product.data.sku,
                 colorway: product.data.color,
-                category: product.product_type,
+                category: product.data.product_type,
                 imageURL: () => {
                     return product.pictureUrl;
                 },
