@@ -2,17 +2,17 @@ import { IShoeSize } from "./Sizings";
 
 export interface IPartialGoatProduct {
     name: string;
-    condition: string;
     url: string;
     sku: string;
     id: string;
+    imageURL(): string;
     category: string;
     colorway: string;
-    imageURL: string;
     markets: IGoatProductMarket[];
 };
 
 export interface IGoatProduct extends IPartialGoatProduct {
+    ticker?: string;
     fetch(): Promise<IGoatProduct>;
 };
 

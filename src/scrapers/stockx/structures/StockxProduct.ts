@@ -115,7 +115,7 @@ export class StockxProduct {
     };
 
     // get related products
-    async relatedProducts(): Promise<StockxProduct[]> {
+    async relatedProducts(productsToRetrieve: number = 15): Promise<StockxProduct[]> {
         const url = 'https://stockx.com/p/e';
 
         // get date in DD.MM.YYYY format
@@ -133,7 +133,7 @@ export class StockxProduct {
                 type: 'RELATED',
                 productId: this.id
             },
-            query: payloads.FetchRelatedProducts
+            query: payloads.FetchRelatedProducts.replace('limit: 15', `limit: ${Math.ceil(productsToRetrieve / 5) * 5}`)
         };
 
         const response = await this.scraper.post(url, JSON.stringify(data), [
@@ -141,6 +141,7 @@ export class StockxProduct {
             ['apollographql-client-version', dateString],
             ["content-type", "application/json"]
         ]).then(res => JSON.parse(res).data.product.related.edges);
+
 
         // parse products from response
         const products = response.map(r => {
@@ -156,6 +157,6 @@ export class StockxProduct {
             } as IPartialStockxProduct;
         });
 
-        return products.map(p => new StockxProduct(p, this.scraper));
+        return products.map(p => new StockxProduct(p, this.scraper)).slice(0, productsToRetrieve);
     };
 }

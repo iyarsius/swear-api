@@ -4,13 +4,14 @@ import sizes from "../../../data/sizes";
 
 export class GoatProduct {
     private scraper: BaseScraper;
-    private _imageURL: string;
+    public imageURL: () => string;
     public name: string;
     public url: string;
+    public category: string;
     public id: string;
     public sku: string;
     public colorway: string;
-    public ticker: string = '';
+    public ticker: string;
     public markets: IGoatProductMarket[];
 
     constructor(data: IPartialGoatProduct, scraper: BaseScraper) {
@@ -18,14 +19,11 @@ export class GoatProduct {
         this.url = data.url;
         this.sku = data.sku;
         this.id = data.id;
+        this.category = data.category;
         this.colorway = data.colorway;
         this.markets = data.markets;
         this.scraper = scraper;
-        this._imageURL = data.imageURL
-    }
-
-    imageURL() {
-        return this._imageURL;
+        this.imageURL = data.imageURL
     }
 
     async fetch() {
@@ -43,7 +41,7 @@ export class GoatProduct {
             [ "referer", random ? "https://www.google.com/" : "https://www.goat.com/" ],
             [ "Accept", "application/json" ],
             [ "content-type", "application/json" ],
-        ]
+        ];
 
         // get csrf token from cookie if cookie exists and create header from it
         const csrfToken = this.scraper.getCookieValue('csrf');
@@ -92,4 +90,21 @@ export class GoatProduct {
 
         return this;
     };
+    
+    async relatedProducts(productsToRetrieve: number = 15) {
+        const response = await this.scraper.get(`https://www.goat.com/api/v1/product_templates/recommended?count=${productsToRetrieve}&productTemplateId=${this.id}`).then(JSON.parse);
+
+        const products = response.productTemplates;
+        return products.map(product => new GoatProduct({
+            name: product.name,
+            id: product.id,
+            category: product.productType,
+            colorway: product.details,
+            imageURL: product.pictureUrl,
+            sku: product.sku,
+            url: `https://www.goat.com/${product.productType}/${product.slug}`,
+            markets: []
+
+        }, this.scraper));
+    }
 }

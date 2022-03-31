@@ -17,7 +17,7 @@ export class Goat {
         const url = `https://pwcdauseo-zone.cnstrc.com/search/${input.replaceAll(' ', '%20')}?key=key_XT7bjdbvjgECO5d8&i=24978b78-b53a-4d04-9cf8-94248ed8d8f0&num_results_per_page=${productsToRetrieve}`
 
         const products = await this.scraper.get(url).then(res => JSON.parse(res).response.results);
-        
+
         return products.map(product => {
             return new GoatProduct({
                 name: product.value,
@@ -25,9 +25,10 @@ export class Goat {
                 id: product.data.id,
                 sku: product.data.sku,
                 colorway: product.data.color,
-                condition: product.data.condition,
                 category: product.product_type,
-                imageURL: product.data.image_url,
+                imageURL: () => {
+                    return product.pictureUrl;
+                },
                 markets: []
             }, this.scraper);
         });
